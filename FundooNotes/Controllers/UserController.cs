@@ -20,6 +20,46 @@ namespace FundooNotes.Controllers
         {
             this.userBL = userBL;
             this.fundooContext = fundooContext;
-        }        
+        }
+        [HttpPost("register")]
+        public ActionResult RegisterUser(UserPostModel user)
+        {
+            try
+            {
+                var getUserData = fundooContext.Users.FirstOrDefault(u => u.email == user.email);
+                if (getUserData != null)
+                {
+                    return this.Ok(new { success = false, message = $"{user.email} is Already Exists" });
+                }
+                this.userBL.AddUser(user);
+                return this.Ok(new { success = true, message = $"Registration Successfull { user.email}" });
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        [HttpPost("login")]
+        public ActionResult LoginUser(string email, string password)
+        {
+            try
+            {
+                var getUserData = fundooContext.Users.FirstOrDefault(u => u.email == email);
+                if (getUserData != null)
+                {
+                    return this.Ok(new { success = false, message = $"{email} LoginFailed" });
+                }
+                this.userBL.LoginUser(email, password);
+                return this.Ok(new { success = true, message = $"Login Successfull { email}" });
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }
