@@ -8,7 +8,9 @@ namespace Repository_Layer.UserInterface
     public interface IUserRL
     {
         public void AddUser(UserPostModel user);
-        string LoginUser(string email, string password);
+        public string LoginUser(string email, string password);
+        public bool ForgotPassword(string email);
+        public bool ChangePassword(string email, string password, string confirmPassword);
     }
 
 }

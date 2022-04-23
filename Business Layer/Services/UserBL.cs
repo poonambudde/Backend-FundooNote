@@ -9,11 +9,12 @@ namespace Business_Layer.Services
 {
     public class UserBL : IUserBL
     {
+        IUserRL userRL;
         public UserBL(IUserRL userRL)
         {
             this.userRL = userRL;
         }
-        IUserRL userRL;
+        
         public void AddUser(UserPostModel user)
         {
             try
@@ -37,6 +38,30 @@ namespace Business_Layer.Services
                 throw ex;
             }
         }
+
+        public bool ForgotPassword(string email)
+        {
+            try
+            {
+                return this.userRL.ForgotPassword(email);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool ChangePassword(string email, string password, string confirmPassword)
+        {
+            try
+            {
+                return userRL.ChangePassword(email, password, confirmPassword);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
 
