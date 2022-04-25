@@ -1,4 +1,4 @@
-﻿using Database_Layer;
+using Database_Layer;
 using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
