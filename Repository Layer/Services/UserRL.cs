@@ -6,10 +6,12 @@ using Repository_Layer.FundooNotesContext;
 using Repository_Layer.Services;
 using Repository_Layer.UserInterface;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Repository_Layer.Entity;
 
 namespace Repository_Layer.User
 {
@@ -26,15 +28,15 @@ namespace Repository_Layer.User
         {
             try
             {
-                Entity.User userEntity = new Entity.User();
-                userEntity.userID = new Entity.User().userID;
-                userEntity.firstName = user.firstName;
-                userEntity.lastName = user.lastName;
-                userEntity.email = user.email;
-                userEntity.password = EncryptPassword(user.password);
-                userEntity.registeredDate = DateTime.Now;
-                userEntity.address = user.address;
-                fundooContext.Users.Add(userEntity);
+                Entity.User user1 = new Entity.User();
+                user1.userID = new Entity.User().userID;
+                user1.firstName = user.firstName;
+                user1.lastName = user.lastName;
+                user1.email = user.email;
+                user1.password = EncryptPassword(user.password);
+                user1.registeredDate = DateTime.Now;
+                user1.address = user.address;
+                fundooContext.Users.Add(user1);
                 fundooContext.SaveChanges();
             }
             catch (Exception ex)
@@ -208,6 +210,19 @@ namespace Repository_Layer.User
                 {
                     return false;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Entity.User> GetAllUsers()
+        {
+            try
+            {
+                var result = fundooContext.Users.ToList();
+                return result;
             }
             catch (Exception ex)
             {

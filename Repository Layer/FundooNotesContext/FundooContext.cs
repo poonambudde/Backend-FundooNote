@@ -18,8 +18,6 @@ namespace Repository_Layer.FundooNotesContext
             modelBuilder.Entity<Entity.User>()
             .HasIndex(u => u.email)
             .IsUnique();
-
-
         }
     }
 }

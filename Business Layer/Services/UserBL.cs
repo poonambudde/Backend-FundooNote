@@ -1,5 +1,7 @@
 ﻿using Business_Layer.Interfaces;
 using Database_Layer;
+using Repository_Layer.Entity;
+using Repository_Layer.User;
 using Repository_Layer.UserInterface;
 using System;
 using System.Collections.Generic;
@@ -59,6 +61,19 @@ namespace Business_Layer.Services
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public List<User> GetAllUsers()
+        {
+            try
+            {
+                return userRL.GetAllUsers();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
