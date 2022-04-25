@@ -1,4 +1,4 @@
-﻿using Database_Layer;
+using Database_Layer;
 using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -31,7 +31,7 @@ namespace Repository_Layer.User
                 userEntity.firstName = user.firstName;
                 userEntity.lastName = user.lastName;
                 userEntity.email = user.email;
-                userEntity.password = user.password;
+                userEntity.password = EncryptPassword(user.password);
                 userEntity.registeredDate = DateTime.Now;
                 userEntity.address = user.address;
                 fundooContext.Users.Add(userEntity);
@@ -85,50 +85,26 @@ namespace Repository_Layer.User
             return tokenHandler.WriteToken(token);
         }
 
-        //public static string EncryptPassword(string password)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(password))
-        //        {
-        //            return null;
-        //        }
-        //        else
-        //        {
-        //            byte[] b = Encoding.ASCII.GetBytes(password);
-        //            string encrypted = Convert.ToBase64String(b);
-        //            return encrypted;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-        //public static string DecryptedPassword(string encryptedPassword)
-        //{
-        //    byte[] b;
-        //    string decrypted;
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(encryptedPassword))
-        //        {
-        //            return null;
-        //        }
-        //        else
-        //        {
-        //            b = Convert.FromBase64String(encryptedPassword);
-        //            decrypted = Encoding.ASCII.GetString(b);
-        //            return decrypted;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //}
-
+        public static string EncryptPassword(string password)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(password))
+                {
+                    return null;
+                }
+                else
+                {
+                    byte[] b = Encoding.ASCII.GetBytes(password);
+                    string encrypted = Convert.ToBase64String(b);
+                    return encrypted;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public bool ForgotPassword(string email)
         {
