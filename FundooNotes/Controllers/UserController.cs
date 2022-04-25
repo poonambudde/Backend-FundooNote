@@ -16,7 +16,7 @@ namespace FundooNotes.Controllers
     {
         IUserBL userBL;
         FundooContext fundooContext;
-        public UserController (IUserBL userBL, FundooContext fundooContext)
+        public UserController(IUserBL userBL, FundooContext fundooContext)
         {
             this.userBL = userBL;
             this.fundooContext = fundooContext;
@@ -39,13 +39,13 @@ namespace FundooNotes.Controllers
                 throw ex;
             }
         }
-     
+
         [HttpPost("login/{email}/{password}")]
         public ActionResult LoginUser(string email, string password)
         {
             try
             {
-                var result = fundooContext.Users.FirstOrDefault(u => u.email == email );
+                var result = fundooContext.Users.FirstOrDefault(u => u.email == email);
                 if (result != null)
                 {
                     return this.Ok(new { success = false, message = $"{email} LoginFailed" });
@@ -106,6 +106,20 @@ namespace FundooNotes.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpGet("getallusers")]
+        public ActionResult GetAllUsers()
+        {
+            try
+            {
+                var result = userBL.GetAllUsers();
+                return this.Ok(new { success = true, message = $"Below are the User data", data = result });
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }

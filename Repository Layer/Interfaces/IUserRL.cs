@@ -11,6 +11,7 @@ namespace Repository_Layer.UserInterface
         public string LoginUser(string email, string password);
         public bool ForgotPassword(string email);
         public bool ChangePassword(string email, string password, string confirmPassword);
+        List<Entity.User> GetAllUsers();
     }
 
 }
