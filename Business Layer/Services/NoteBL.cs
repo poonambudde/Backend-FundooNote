@@ -41,5 +41,37 @@ namespace Business_Layer.Services
                 throw;
             }
         }
+
+        public bool UpdateNotes(int noteId, NotePostModel notePostModel)
+        {
+            try
+            {
+                if (noteRL.UpdateNotes(noteId, notePostModel))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public bool DeleteNote(int NotesId)
+        {
+            try
+            {
+                if (noteRL.DeleteNote(NotesId))
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

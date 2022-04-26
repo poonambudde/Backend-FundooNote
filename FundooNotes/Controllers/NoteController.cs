@@ -2,6 +2,7 @@
 using Database_Layer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Repository_Layer.Entity;
 using Repository_Layer.FundooNotesContext;
 using System;
 using System.Collections.Generic;
@@ -46,11 +47,55 @@ namespace FundooNotes.Controllers
             try
             {
                 await this.noteBL.GetNote(noteId, userId);
-                return this.Ok(new { success = true, message = "Get Note Successfull " });
+                return this.Ok(new { success = true, message = "Get Note Successful " });
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpPut("updatenote/{noteId}")]
+        public IActionResult UpdateNotes(int noteId, NotePostModel notePostModel)
+        {
+            try
+            {
+                if (noteBL.UpdateNotes(noteId, notePostModel))
+                {
+                    return this.Ok(new { Success = true, message = "Notes updated successfully", response = notePostModel, noteId });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Note with given ID not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("deleteNote/{noteId}")]
+        public IActionResult DeleteNote(int noteId)
+        {
+            try
+            {
+                if (noteBL.DeleteNote(noteId))
+                {
+                    return this.Ok(new { Success = true, message = "Notes deleted successfully" });
+
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Notes with given ID not found" });
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }

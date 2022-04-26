@@ -57,5 +57,34 @@ namespace Repository_Layer.Services
                 throw;
             }
         }
+
+        public bool UpdateNotes(int noteId, NotePostModel notePostModel)
+        {
+            Note note = fundooContext.Note.Where(e => e.NoteId == noteId).FirstOrDefault();
+            note.Title = notePostModel.Title;
+            note.Description = notePostModel.Description;
+            note.BGColour = notePostModel.BGColour;
+            fundooContext.Note.Update(note);
+            var result = fundooContext.SaveChangesAsync();
+            if (result != null)
+                return true;
+            else
+                return false;
+        }
+
+        public bool DeleteNote(int noteId)
+        {
+            Note notes = fundooContext.Note.Where(e => e.NoteId == noteId).FirstOrDefault();
+            if (notes != null)
+            {
+                fundooContext.Note.Remove(notes);
+                fundooContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
