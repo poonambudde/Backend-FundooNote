@@ -29,7 +29,7 @@ namespace FundooNotes.Controllers
                 var getUserData = fundooContext.Users.FirstOrDefault(u => u.email == user.email);
                 if (getUserData != null)
                 {
-                    return this.Ok(new { success = false, message = $"{user.email} is Already Exists" });
+                    return this.BadRequest(new { success = false, message = $"{user.email} is Already Exists" });
                 }
                 this.userBL.AddUser(user);
                 return this.Ok(new { success = true, message = $"Registration Successfull { user.email}" });
@@ -45,13 +45,12 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var result = fundooContext.Users.FirstOrDefault(u => u.email == email);
+                var result = this.userBL.LoginUser(email, password);
                 if (result != null)
                 {
-                    return this.Ok(new { success = false, message = $"{email} LoginFailed" });
+                    return this.Ok(new { success = true, message = $"Login Successfull {result}" });
                 }
-                this.userBL.LoginUser(email, password);
-                return this.Ok(new { success = true, message = $"Login Successfull { email}, Token = {result}" });
+                return this.BadRequest(new { success = false, message = $"{result} LoginFailed" });
             }
             catch (Exception ex)
             {

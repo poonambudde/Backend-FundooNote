@@ -13,6 +13,9 @@ namespace Repository_Layer.FundooNotesContext
 
         }
         public DbSet<Entity.User> Users { get; set; }
+        public DbSet<Note> Note { get; set; }
+        public IEnumerable<object> Notes { get; internal set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Entity.User>()
