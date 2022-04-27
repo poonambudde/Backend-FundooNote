@@ -23,7 +23,7 @@ namespace FundooNotes.Controllers
             this.fundooContext = fundooContext;
         }
         [Authorize]
-        [HttpPost]
+        [HttpPost("AddNote")]
         public async Task<ActionResult> AddNote(NotePostModel notePostModel)
         {
             try
@@ -41,13 +41,13 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpGet("{noteId}")]
+        [HttpGet("Getnote/{noteId}")]
         public async Task<ActionResult> GetNote(int noteId, int userId)
         {
             try
             {
                 await this.noteBL.GetNote(noteId, userId);
-                return this.Ok(new { success = true, message = "Get Note Successful " });
+                return this.Ok(new { success = true, message = "Get Note Successfull " });
             }
             catch (Exception ex)
             {
@@ -56,19 +56,31 @@ namespace FundooNotes.Controllers
         }
 
         [Authorize]
-        [HttpPut("updatenote/{noteId}")]
-        public IActionResult UpdateNotes(int noteId, NotePostModel notePostModel)
+        [HttpPut("Update/{noteId}")]
+        public async Task<IActionResult> UpdateNote(NotePostModel notePostModel, int noteId)
         {
             try
             {
-                if (noteBL.UpdateNotes(noteId, notePostModel))
-                {
-                    return this.Ok(new { Success = true, message = "Notes updated successfully", response = notePostModel, noteId });
-                }
-                else
-                {
-                    return this.BadRequest(new { Success = false, message = "Note with given ID not found" });
-                }
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var result = await this.noteBL.UpdateNote(notePostModel, noteId, userId);
+                return this.Ok(new { success = true, message = $"Note updated successfully!!!", data = result });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpDelete("Delete/{noteId}")]
+        public async Task<ActionResult> DeleteNote(int noteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                await this.noteBL.DeleteNote(noteId, userId);
+                return this.Ok(new { success = true, message = "Note deleted successfully!!!" });
             }
             catch (Exception ex)
             {
@@ -77,26 +89,25 @@ namespace FundooNotes.Controllers
         }
 
         [Authorize]
-        [HttpDelete("deleteNote/{noteId}")]
-        public IActionResult DeleteNote(int noteId)
+        [HttpGet("GetAllNotes")]
+        public async Task<ActionResult> GetAllNotes()
         {
             try
             {
-                if (noteBL.DeleteNote(noteId))
-                {
-                    return this.Ok(new { Success = true, message = "Notes deleted successfully" });
-
-                }
-                else
-                {
-                    return this.BadRequest(new { Success = false, message = "Notes with given ID not found" });
-                }
-
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                List<Note> result = new List<Note>();
+                result= await this.noteBL.GetAllNotes(userId);
+                return this.Ok(new { success = true, message = $"Below are all notes", data= result });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                throw ex;
             }
         }
     }
 }
+
+
+
+  

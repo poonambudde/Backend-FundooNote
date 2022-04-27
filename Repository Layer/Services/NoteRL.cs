@@ -58,32 +58,58 @@ namespace Repository_Layer.Services
             }
         }
 
-        public bool UpdateNotes(int noteId, NotePostModel notePostModel)
+        public async Task<Note> UpdateNote(NotePostModel notePostModel, int noteId, int userId)
         {
-            Note note = fundooContext.Note.Where(e => e.NoteId == noteId).FirstOrDefault();
-            note.Title = notePostModel.Title;
-            note.Description = notePostModel.Description;
-            note.BGColour = notePostModel.BGColour;
-            fundooContext.Note.Update(note);
-            var result = fundooContext.SaveChangesAsync();
-            if (result != null)
-                return true;
-            else
-                return false;
+            try
+            {
+                var res = fundooContext.Note.FirstOrDefault(u => u.NoteId == noteId && u.UserId == userId);
+                if (res != null)
+                {
+                    res.Title = notePostModel.Title;
+                    res.Description = notePostModel.Description;
+                    res.BGColour = notePostModel.BGColour;
+                    res.IsArchive = notePostModel.IsArchive;
+                    res.IsReminder = notePostModel.IsReminder;
+                    res.IsPin = notePostModel.IsPin;
+                    res.IsTrash = notePostModel.IsTrash;
+                    await fundooContext.SaveChangesAsync();
+
+                    return await fundooContext.Note.Where(a => a.NoteId == noteId).FirstOrDefaultAsync();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
-        public bool DeleteNote(int noteId)
+        public async Task DeleteNote(int noteId, int userId)
         {
-            Note notes = fundooContext.Note.Where(e => e.NoteId == noteId).FirstOrDefault();
-            if (notes != null)
+            try
             {
-                fundooContext.Note.Remove(notes);
-                fundooContext.SaveChanges();
-                return true;
+                Note res = fundooContext.Note.FirstOrDefault(u => u.NoteId == noteId && u.UserId == userId);
+                fundooContext.Note.Remove(res);
+                await fundooContext.SaveChangesAsync();
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                throw ex;
+            }
+        }
+
+        public async Task<List<Note>> GetAllNote(int userId)
+        {
+            try
+            {
+                return await fundooContext.Note.Where(u => u.UserId == userId).ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
         }
     }

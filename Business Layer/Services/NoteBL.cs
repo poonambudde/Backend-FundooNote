@@ -42,36 +42,42 @@ namespace Business_Layer.Services
             }
         }
 
-        public bool UpdateNotes(int noteId, NotePostModel notePostModel)
+        public async Task<Note> UpdateNote(NotePostModel notePostModel, int noteId, int userId)
         {
             try
             {
-                if (noteRL.UpdateNotes(noteId, notePostModel))
-                    return true;
-                else
-                    return false;
+                return await this.noteRL.UpdateNote(notePostModel, noteId, userId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
+            }
+        }
+        public Task DeleteNote(int noteId, int userId)
+        {
+            try
+            {
+                return this.noteRL.DeleteNote(noteId, userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
-        public bool DeleteNote(int NotesId)
+        public async Task<List<Note>> GetAllNotes(int userId)
         {
             try
             {
-                if (noteRL.DeleteNote(NotesId))
-                    return true;
-                else
-                    return false;
+                return await this.noteRL.GetAllNote(userId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
     }
 }
+
+
+
