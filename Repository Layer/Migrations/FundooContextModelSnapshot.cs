@@ -19,6 +19,31 @@ namespace Repository_Layer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Repository_Layer.Entity.Label", b =>
+                {
+                    b.Property<int>("LabelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LabelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LabelId");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Label");
+                });
+
             modelBuilder.Entity("Repository_Layer.Entity.Note", b =>
                 {
                     b.Property<int>("NoteId")
@@ -28,6 +53,9 @@ namespace Repository_Layer.Migrations
 
                     b.Property<string>("BGColour")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -43,6 +71,9 @@ namespace Repository_Layer.Migrations
 
                     b.Property<bool>("IsTrash")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -91,6 +122,21 @@ namespace Repository_Layer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Repository_Layer.Entity.Label", b =>
+                {
+                    b.HasOne("Repository_Layer.Entity.Note", "Note")
+                        .WithMany("Labels")
+                        .HasForeignKey("NoteId");
+
+                    b.HasOne("Repository_Layer.Entity.User", "User")
+                        .WithMany("Labels")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Note");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Repository_Layer.Entity.Note", b =>
                 {
                     b.HasOne("Repository_Layer.Entity.User", "User")
@@ -100,6 +146,16 @@ namespace Repository_Layer.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Repository_Layer.Entity.Note", b =>
+                {
+                    b.Navigation("Labels");
+                });
+
+            modelBuilder.Entity("Repository_Layer.Entity.User", b =>
+                {
+                    b.Navigation("Labels");
                 });
 #pragma warning restore 612, 618
         }
