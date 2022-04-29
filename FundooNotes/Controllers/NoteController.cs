@@ -28,26 +28,27 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Int32.Parse(userid.Value);
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
 
-                await this.noteBL.AddNote(notePostModel, UserId);
-                return this.Ok(new { success = true, message = "Note Added Successfully " });
+                await this.noteBL.AddNote(notePostModel, userId);
+                return this.Ok(new { success = true, message = "Note Added Successfully!!" });
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+
         }
 
+        [Authorize]
         [HttpGet("Getnote/{noteId}")]
         public async Task<ActionResult> GetNote(int noteId, int userId)
         {
             try
             {
-                await this.noteBL.GetNote(noteId, userId);
-                return this.Ok(new { success = true, message = "Get Note Successfull " });
+                var result = await this.noteBL.GetNote(noteId, userId);
+                return this.Ok(new { success = true, message = $"Below are the Note data", data = result });
             }
             catch (Exception ex)
             {
@@ -97,14 +98,92 @@ namespace FundooNotes.Controllers
                 var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Int32.Parse(userid.Value);
                 List<Note> result = new List<Note>();
-                result= await this.noteBL.GetAllNotes(userId);
-                return this.Ok(new { success = true, message = $"Below are all notes", data= result });
+                result = await this.noteBL.GetAllNote(userId);
+                return this.Ok(new { success = true, message = $"Below are all notes", data = result });
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+        [Authorize]
+        [HttpPut("ArchieveNote/{noteId}")]
+        public async Task<ActionResult> IsArchieveNote(int noteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var res = await this.noteBL.ArchieveNote(noteId, userId);
+                if (res != null)
+                    return this.Ok(new { success = true, message = "Note Archieved successfully!!!" });
+                else
+                    return this.BadRequest(new { success = false, message = "Failed to archieve note or Id does not exists" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("IsPinned/{noteId}")]
+        public async Task<ActionResult> IsPinned(int noteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var res = await this.noteBL.PinNote(noteId, userId);
+                if (res != null)
+                    return this.Ok(new { success = true, message = "Note pinned successfully!!!" });
+                else
+                    return this.BadRequest(new { success = false, message = "Failed to pin note or Id does not exists" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("IsTrash{noteId}")]
+        public async Task<ActionResult> IsTrash(int noteId)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var res = await this.noteBL.TrashNote(noteId, userId);
+                if (res != null)
+                    return this.Ok(new { success = true, message = "Note trashed successfully!!!" });
+                else
+                    return this.BadRequest(new { success = false, message = "Failed to trash note or Id does not exists" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("ChangeColorNote/{noteId}")]
+        public async Task<ActionResult> ChangeColorNote(int noteId, string color)
+        {
+            try
+            {
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Int32.Parse(userid.Value);
+                var res = await this.noteBL.ChangeColor(noteId, userId, color);
+                if (res != null)
+                    return this.Ok(new { success = true, message = "Note color changed successfully!!!" });
+                else
+                    return this.BadRequest(new { success = false, message = "Failed to change color note or Id does not exists" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
 

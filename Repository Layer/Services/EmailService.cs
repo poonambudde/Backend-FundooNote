@@ -8,7 +8,6 @@ namespace Repository_Layer.Services
 {
     public class EmailService
     {
-
         public static void SendMail(string email, string token)
         {
             using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Repository_Layer.FundooNotesContext;
 using Repository_Layer.Interfaces;
 using Repository_Layer.Services;
@@ -37,11 +38,17 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson(option =>
+            {
+                option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             services.AddControllers();
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
+            services.AddTransient<ILabelBL, LabelBL>();
+            services.AddTransient<ILabelRL, LabelRL>();
 
             services.AddDbContext<FundooContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooNotes"]));
             services.AddAuthentication(x =>

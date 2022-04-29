@@ -65,15 +65,65 @@ namespace Business_Layer.Services
             }
         }
 
-        public async Task<List<Note>> GetAllNotes(int userId)
+        public async Task<List<Note>> GetAllNote(int UserId)
+        {
+
+            try
+            {
+                return await noteRL.GetAllNote(UserId);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+        }
+
+
+
+        public Task<Note> ArchieveNote(int noteId, int userId)
         {
             try
             {
-                return await this.noteRL.GetAllNote(userId);
+                return this.noteRL.ArchieveNote(noteId, userId);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        public Task<Note> PinNote(int noteId, int userId)
+        {
+            try
+            {
+                return this.noteRL.PinNote(noteId, userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Task<Note> TrashNote(int noteId, int userId)
+        {
+            try
+            {
+                return noteRL.TrashNote(noteId, userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Task<Note> ChangeColor(int noteId, int userId, string newColor)
+        {
+            try
+            {
+                return this.noteRL.ChangeColor(noteId, userId, newColor);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }
