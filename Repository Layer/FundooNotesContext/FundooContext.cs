@@ -15,6 +15,7 @@ namespace Repository_Layer.FundooNotesContext
         public DbSet<Entity.User> Users { get; set; }
         public DbSet<Note> Note { get; set; }
         public DbSet<Label> Label{ get; set; }
+        public DbSet<Collaborator> Collaborators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
