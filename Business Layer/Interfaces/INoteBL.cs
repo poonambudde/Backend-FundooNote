@@ -17,6 +17,7 @@ namespace Business_Layer.Interfaces
         Task<Note> ArchieveNote(int noteId, int userId);
         Task<Note> PinNote(int noteId, int userId);
         Task<Note> TrashNote(int noteId, int userId);
-        Task<Note> ChangeColor(int noteId, int userId, string newColor);        
+        Task<Note> ChangeColor(int noteId, int userId, string newColor);
+        Task<List<Note>> GetAllNotes_ByRadisCache();
     }
 }
