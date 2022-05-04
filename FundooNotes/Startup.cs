@@ -90,8 +90,14 @@ namespace FundooNotes
                     { jwtSecurityScheme, Array.Empty<string>() }
                 });
             });
+            services.AddDistributedRedisCache(
+                options =>
+                {
+                    options.Configuration = "Localhost:6379";
+                }
+                );
         }
-               
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -101,7 +107,7 @@ namespace FundooNotes
             }
 
             app.UseHttpsRedirection();
-          
+
             app.UseAuthentication();
 
             app.UseRouting();
