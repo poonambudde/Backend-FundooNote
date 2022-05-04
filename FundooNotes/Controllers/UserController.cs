@@ -121,5 +121,34 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
+        
+        [HttpGet("GetAllUsersRedis")]
+        public ActionResult GetAllUsers_ByRadisCache()
+        {
+            try
+            {
+                string serializeUserList;
+                var userList = new List<User>();
+                var redisUserList = distributedCache.Get(keyName);
+                if (redisUserList != null)
+                {
+                    serializeUserList = Encoding.UTF8.GetString(redisUserList);
+                    userList = JsonConvert.DeserializeObject<List<User>>(serializeUserList);
+                }
+                else
+                {
+                    userList = this.userBL.GetAllUsers();
+                    serializeUserList = JsonConvert.SerializeObject(userList);
+                    redisUserList = Encoding.UTF8.GetBytes(serializeUserList);
+                    var option = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(20)).SetAbsoluteExpiration(TimeSpan.FromHours(6));
+                    distributedCache.SetAsync(keyName, redisUserList, option);
+                }
+                return this.Ok(new { success = true, message = "Get Users successful!!!", data = userList });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
