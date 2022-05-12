@@ -52,11 +52,11 @@ namespace Business_Layer.Services
                 throw ex;
             }
         }
-        public bool ChangePassword(string email, string password, string confirmPassword)
+        public bool ResetPassword(string email, string password, string confirmPassword)
         {
             try
             {
-                return userRL.ChangePassword(email, password, confirmPassword);
+                return userRL.ResetPassword(email, password, confirmPassword);
             }
             catch (Exception ex)
             {
@@ -69,13 +69,11 @@ namespace Business_Layer.Services
             try
             {
                 return userRL.GetAllUsers();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-
     }
 }

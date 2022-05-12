@@ -80,8 +80,6 @@ namespace Business_Layer.Services
 
         }
 
-
-
         public Task<Note> ArchieveNote(int noteId, int userId)
         {
             try
@@ -124,6 +122,18 @@ namespace Business_Layer.Services
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        public async Task<List<Note>> GetAllNotes_ByRadisCache()
+        {
+            try
+            {
+                return await noteRL.GetAllNotes_ByRadisCache();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

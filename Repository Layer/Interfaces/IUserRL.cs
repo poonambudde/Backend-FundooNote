@@ -10,7 +10,7 @@ namespace Repository_Layer.UserInterface
         public void AddUser(UserPostModel user);
         public string LoginUser(string email, string password);
         public bool ForgotPassword(string email);
-        public bool ChangePassword(string email, string password, string confirmPassword);
+        public bool ResetPassword(string email, string password, string confirmPassword);
         List<Entity.User> GetAllUsers();
     }
 

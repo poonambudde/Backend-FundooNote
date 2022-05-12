@@ -195,7 +195,7 @@ namespace Repository_Layer.User
             return tokenHandler.WriteToken(token);
         }
 
-        public bool ChangePassword(string email, string password, string confirmPassword)
+        public bool ResetPassword(string email, string password, string confirmPassword)
         {
             try
             {
@@ -229,5 +229,7 @@ namespace Repository_Layer.User
                 throw ex;
             }
         }
+
+       
     }
 }

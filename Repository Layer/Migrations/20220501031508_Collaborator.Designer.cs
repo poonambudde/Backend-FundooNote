@@ -10,8 +10,8 @@ using Repository_Layer.FundooNotesContext;
 namespace Repository_Layer.Migrations
 {
     [DbContext(typeof(FundooContext))]
-    [Migration("20220429114013_Label_Table")]
-    partial class Label_Table
+    [Migration("20220501031508_Collaborator")]
+    partial class Collaborator
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,31 @@ namespace Repository_Layer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Repository_Layer.Entity.Collaborator", b =>
+                {
+                    b.Property<int>("CollabId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CollabEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CollabId");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Collaborators");
+                });
 
             modelBuilder.Entity("Repository_Layer.Entity.Label", b =>
                 {
@@ -122,6 +147,21 @@ namespace Repository_Layer.Migrations
                         .HasFilter("[email] IS NOT NULL");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Repository_Layer.Entity.Collaborator", b =>
+                {
+                    b.HasOne("Repository_Layer.Entity.Note", "Note")
+                        .WithMany()
+                        .HasForeignKey("NoteId");
+
+                    b.HasOne("Repository_Layer.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("userId");
+
+                    b.Navigation("Note");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Repository_Layer.Entity.Label", b =>

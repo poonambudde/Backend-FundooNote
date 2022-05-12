@@ -10,8 +10,8 @@ namespace Business_Layer.Interfaces
     {
         public void AddUser(UserPostModel user);
         public string LoginUser(string email, string password);
-        public bool ForgotPassword(string email); 
-        public bool ChangePassword(string email, string password, string confirmpassword);
+        public bool ForgotPassword(string email);
+        public bool ResetPassword(string email, string password, string confirmpassword);
         List<User> GetAllUsers();
     }
 }
