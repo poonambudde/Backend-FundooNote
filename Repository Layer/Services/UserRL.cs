@@ -228,8 +228,6 @@ namespace Repository_Layer.User
             {
                 throw ex;
             }
-        }
-
-       
+        }    
     }
 }
