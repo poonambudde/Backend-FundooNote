@@ -171,9 +171,9 @@ namespace Repository_Layer.Services
                     return null;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                throw ex;
             }
         }
         public async Task<Note> TrashNote(int noteId, int userId)
@@ -219,6 +219,18 @@ namespace Repository_Layer.Services
                 {
                     return null;
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<List<Note>> GetAllNotes_ByRadisCache()
+        {
+            try
+            {
+                return await fundooContext.Note.ToListAsync();
             }
             catch (Exception e)
             {

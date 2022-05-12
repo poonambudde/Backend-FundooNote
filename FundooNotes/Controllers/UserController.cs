@@ -1,12 +1,19 @@
-﻿using Business_Layer.Interfaces;
+using Business_Layer.Interfaces;
 using Database_Layer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using Repository_Layer.Entity;
 using Repository_Layer.FundooNotesContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
@@ -16,10 +23,15 @@ namespace FundooNotes.Controllers
     {
         IUserBL userBL;
         FundooContext fundooContext;
-        public UserController(IUserBL userBL, FundooContext fundooContext)
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+        private string keyName = "Poonam";
+        public UserController(IUserBL userBL, FundooContext fundooContext, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.userBL = userBL;
             this.fundooContext = fundooContext;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
         [HttpPost("register")]
         public ActionResult RegisterUser(UserPostModel user)
@@ -81,16 +93,16 @@ namespace FundooNotes.Controllers
                 throw ex;
             }
         }
-
-        [HttpPut("ChangePassword/{email}")]
-        public IActionResult ChangePassword(string password, string confirmpassword)
+        [Authorize]
+        [HttpPut("ResetPassword")]
+        public IActionResult ResetPassword(string password, string confirmpassword)
         {
             try
             {
                 var email = User.FindFirst(ClaimTypes.Email).Value.ToString();
                 var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
                 int userId = Int32.Parse(userid.Value);
-                bool res = userBL.ChangePassword(email, password, confirmpassword);
+                bool res = userBL.ResetPassword(email, password, confirmpassword);
 
                 if (!res)
                 {
@@ -121,7 +133,7 @@ namespace FundooNotes.Controllers
                 throw e;
             }
         }
-        
+
         [HttpGet("GetAllUsersRedis")]
         public ActionResult GetAllUsers_ByRadisCache()
         {

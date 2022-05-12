@@ -1,4 +1,4 @@
-﻿using Business_Layer.Interfaces;
+using Business_Layer.Interfaces;
 using Database_Layer;
 using Repository_Layer.Entity;
 using Repository_Layer.Interfaces;
@@ -80,8 +80,6 @@ namespace Business_Layer.Services
 
         }
 
-
-
         public Task<Note> ArchieveNote(int noteId, int userId)
         {
             try
@@ -131,7 +129,7 @@ namespace Business_Layer.Services
         {
             try
             {
-                return await this.noteRL.GetAllNotes_ByRadisCache();
+                return await noteRL.GetAllNotes_ByRadisCache();
             }
             catch (Exception ex)
             {
