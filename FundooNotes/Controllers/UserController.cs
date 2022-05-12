@@ -1,4 +1,4 @@
-﻿using Business_Layer.Interfaces;
+using Business_Layer.Interfaces;
 using Database_Layer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -1,4 +1,4 @@
-﻿using Database_Layer;
+using Database_Layer;
 using Repository_Layer.Entity;
 using System;
 using System.Collections.Generic;

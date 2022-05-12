@@ -224,30 +224,7 @@ namespace Repository_Layer.Services
             {
                 throw e;
             }
-        }
 
-        public async Task<List<Note>> GetAllNotes_ByRadisCache()
-        {
-            try
-            {
-                return await fundooContext.Note.ToListAsync();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public async Task<List<Note>> GetAllNotes_ByRadisCache()
-        {
-            try
-            {
-                return await fundooContext.Note.ToListAsync();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
     }
 }
